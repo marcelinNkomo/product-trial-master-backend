@@ -1,4 +1,4 @@
-# Product ALTEN
+# Product KATA
 
 Ce readme decrit comment lancer le projet en local (si besoin)
 
