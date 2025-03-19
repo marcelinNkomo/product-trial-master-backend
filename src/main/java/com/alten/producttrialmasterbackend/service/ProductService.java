@@ -1,5 +1,7 @@
 package com.alten.producttrialmasterbackend.service;
 
+import com.alten.producttrialmasterbackend.dto.ProductDto;
+import com.alten.producttrialmasterbackend.dto.utils.ProductDtoMapper;
 import com.alten.producttrialmasterbackend.entities.Product;
 import com.alten.producttrialmasterbackend.exception.ProductNotFoundException;
 import com.alten.producttrialmasterbackend.repository.ProductRepository;
@@ -13,17 +15,18 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductDtoMapper mapper;
 
-    public Product createNewProduct(Product product) {
-        return productRepository.save(product);
+    public Product createNewProduct(ProductDto productDto) {
+        return productRepository.save(mapper.mapToProduct(productDto));
     }
 
-    public Product updateExistingProduct(Product updatedProduct) throws ProductNotFoundException {
-        Long id = updatedProduct.getId();
+    public Product updateExistingProduct(ProductDto updatedProductDto) throws ProductNotFoundException {
+        Long id = updatedProductDto.getId();
         if (!productRepository.existsById(id))
             throw new ProductNotFoundException(id);
 
-        return productRepository.save(updatedProduct);
+        return productRepository.save(mapper.mapToProduct(updatedProductDto));
     }
 
     public List<Product> retrieveProducts() {

@@ -21,6 +21,7 @@ import static org.springframework.security.core.userdetails.User.builder;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+
     @Value("${default-admin-email}")
     private String defaultAdminEmail;
 

@@ -18,6 +18,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import static org.springframework.security.authorization.AuthorityAuthorizationManager.hasAuthority;
 
+/**
+ * Class qui permet de définir les règles de sécurité sur l'application
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -26,7 +29,14 @@ public class SecurityConfig {
     private final UserService userService;
     private final JwtUtils jwtUtils;
 
-
+    /**
+     * ici seul les chemins /account et /token sont accessibles
+     * seul l'utilisateur ayant le droit ADMIN peut ajouter, modifier ou supprimer un produit
+     *
+     * @param http
+     * @return
+     * @throws Exception
+     */
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
@@ -38,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/products/**").access(hasAuthority(ADMIN))
                         .anyRequest().authenticated()
                 )
+                // on applique le filtre jwt avant le filtre UsernamePasswordAuthenticationFilter
                 .addFilterBefore(new JwtFilter(userService, jwtUtils), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
